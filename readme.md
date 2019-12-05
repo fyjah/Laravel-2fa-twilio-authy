@@ -169,6 +169,10 @@ Next, we set a [session](https://www.php.net/manual/en/intro.session.php) variab
 
 ***NOTE:** Apart from the `requestSMS()` method, Twilio Authy SDK also supports other [channels](https://www.twilio.com/docs/authy/two-factor-authentication-channels) for sending the OTP to a user.*
 
+Be sure to import the `AuthyApi` class after the namespace in `LoginController.php`.
+
+    use Authy\AuthyApi;
+
 ### Verifying 2FA OTP
 Next, let’s write out the logic for verifying a user’s OTP code. First generate a [controller](https://laravel.com/docs/6.x/controllers) which will house the logic for verification. Open a terminal and run the following:
 
