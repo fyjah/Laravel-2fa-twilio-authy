@@ -55,7 +55,8 @@ Out-of-the-box, Laravel allows us to easily scaffold a basic authentication syst
 
 We will be making use of the Laravel `auth` command to scaffold our basic authentication logic. Adjustments will be made later to add two-factor authentication(2fa) to our authentication process. Fire up a terminal in the project directory and run the following command to scaffold a basic authentication system:
 
-    $ php artisan make:auth 
+    $ composer require laravel/ui --dev
+    $ php artisan ui vue --auth
 
 The above command will create the login, registration, and home views, as well as routes for all authentication.
 
@@ -137,6 +138,10 @@ The `registerUser()` method accepts three arguments for the user, `email`, `phon
 - *You need to update the validation rules in the `validator()` method to include the `phone_number` and `country_code` fields.*
 
 After successful registration of the user with your Authy service, the user data along with the `authy_id` is stored in your *Users* table.
+
+Be sure to import the `AuthyApi` class after the namespace in `RegisterController.php`.
+
+    use Authy\AuthyApi;
 
 ### Sending 2FA OTP
 To send out the 2FA OTP to a user, you will have to make changes to what happens after a user has been successfully authenticated. Since we are using the Laravel Auth scaffold we won’t be writing out the entire Login logic, but instead we will make changes to the [authenticated()](https://github.com/laravel/framework/blob/6.x/src/Illuminate/Foundation/Auth/AuthenticatesUsers.php#L120) method of the [AuthenticatesUsers](https://laravel.com/api/6.x/Illuminate/Foundation/Auth/AuthenticatesUsers.html) [trait](https://www.php.net/manual/en/language.oop5.traits.php). To make the needed adjustments, open up `app/Http/Controllers/Auth/LoginController.php` and add the following method:
@@ -284,7 +289,7 @@ Open up `app/Http/Middleware/RedirectIfAuthenticated.php` and make the following
     
 ## Updating the views
 
-At this point, you have added 2FA to your application authentication logic. Now, you will need to build out the views which users will use for interacting with your application. Fortunately, Laravel also scaffolds the basic views needed for registering and logging in to the application when the `make:auth` command is used. Although the registration view has been scaffolded, you still need to make changes to it to include the fields for getting the user’s phone number and country code. Open up `resources/views/auth/register.blade.php` and replace its content with the code below to add the needed fields:
+At this point, you have added 2FA to your application authentication logic. Now, you will need to build out the views which users will use for interacting with your application. Fortunately, Laravel also scaffolds the basic views needed for registering and logging in to the application when the `php artisan ui vue --auth` command is used. Although the registration view has been scaffolded, you still need to make changes to it to include the fields for getting the user’s phone number and country code. Open up `resources/views/auth/register.blade.php` and replace its content with the code below to add the needed fields:
 
     @extends('layouts.app')
     @section('content')
